@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071c25" />
+  <title>ORIGENS — O Primeiro Pulso</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="app">
+    <canvas id="world" aria-label="O oceano primordial de Origens"></canvas>
+
+    <section class="hud" aria-label="Estado da criatura">
+      <div class="brand"><span class="pulse-dot"></span><span>ORIGENS</span></div>
+      <div class="era">ERA 01 <b>•</b> O DESPERTAR</div>
+      <div class="stats">
+        <div class="stat energy"><span>ENERGIA</span><i><em id="energyBar"></em></i><strong id="energyValue">68</strong></div>
+        <div class="stat"><span>LINHAGEM</span><strong id="lineage">0 gerações</strong></div>
+      </div>
+    </section>
+
+    <section class="journal" id="journal">
+      <p class="journal-kicker">MEMÓRIA DO UNIVERSO</p>
+      <p id="journalText">O Pulso encontrou água. Algo microscópico abriu os olhos.</p>
+    </section>
+
+    <section class="intro" id="intro">
+      <div class="intro-mark">✦</div>
+      <p class="eyebrow">ATLAS III • 3,8 BILHÕES DE ANOS ATRÁS</p>
+      <h1>O primeiro<br><i>pulso.</i></h1>
+      <p>Você não recebeu uma criatura.<br>Você recebeu uma possibilidade.</p>
+      <button id="begin">DESPERTAR</button>
+      <a class="lab-link" href="laboratorio.html">ABRIR O LABORATÓRIO EVOLUTIVO →</a>
+      <a class="lab-link" href="observatorio.html">OBSERVAR UM PLANETA →</a>
+      <a class="lab-link" href="anatomia.html">CRIAR UMA CRIATURA →</a>
+      <a class="lab-link" href="ciclo.html">ACOMPANHAR UMA LINHAGEM →</a>
+      <a class="lab-link" href="mente.html">OBSERVAR A INTELIGÊNCIA →</a>
+      <a class="lab-link" href="projeto-semente.html">ABRIR O PROJETO SEMENTE →</a>
+      <small>Arraste para nadar • Colete partículas de energia</small>
+      <nav class="module-hub" aria-label="Hub de módulos">
+        <a href="anatomia.html" data-module="anatomia">ANATOMIA</a>
+        <a href="ciclo.html" data-module="ciclo">CICLO</a>
+        <a href="laboratorio.html" data-module="laboratorio">LABORATÓRIO</a>
+        <a href="mente.html" data-module="mente">MENTE</a>
+        <a href="observatorio.html" data-module="observatorio">OBSERVATÓRIO</a>
+        <a href="projeto-semente.html" data-module="semente">SEMENTE</a>
+      </nav>
+    </section>
+
+    <section class="mutation hidden" id="mutation" aria-live="polite">
+      <p class="eyebrow">MARCO EVOLUTIVO</p>
+      <h2>Uma mutação<br>é possível.</h2>
+      <p class="mutation-copy">O ambiente não oferece respostas. Ele faz perguntas.</p>
+      <div class="options" id="options"></div>
+      <p class="inheritance">A escolha será herdada pelas próximas gerações.</p>
+    </section>
+
+    <section class="event hidden" id="event">
+      <p class="eyebrow">EVENTO ECOLÓGICO</p>
+      <h2 id="eventTitle">A água esfriou.</h2>
+      <p id="eventText">Só os organismos mais eficientes encontrarão energia suficiente.</p>
+      <button id="continue">ADAPTAR-SE</button>
+    </section>
+
+    <section class="end hidden" id="end">
+      <p class="eyebrow">PRIMEIRO REGISTRO</p>
+      <h2>Uma espécie<br><i>começou.</i></h2>
+      <p id="endText"></p>
+      <div class="final-stats" id="finalStats"></div>
+      <button id="restart">INICIAR NOVA LINHAGEM</button>
+    </section>
+  </main>
+  <script src="engine.js"></script>\n  <script src="seed-core.js"></script>\n  <script src="game.js"></script>
+</body>
+</html>

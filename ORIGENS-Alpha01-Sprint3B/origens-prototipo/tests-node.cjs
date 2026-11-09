@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const ctx={window:{},console,Date,Math,JSON,Set,Map};ctx.window.window=ctx.window;
+vm.createContext(ctx);
+for(const f of ['seed-core.js','genetic-core.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),ctx,{filename:f});
+const G=ctx.window.GeneticCore, R=ctx.window.SeedCore;
+const tests=[];const test=(n,f)=>{f();tests.push(n)};
+test('identidade e fenótipo derivam da anatomia',()=>{const g=G.fromAnatomy({skeleton:'Ósseo',respiration:'Pulmões',legs:4,muscle:3,brain:'Curioso'},99);assert(g.id);assert.equal(g.phenotype.limbCount,4);assert.equal(g.phenotype.locomotion,'andar');assert.equal(g.phenotype.habitatAffinity,'terrestre')});
+test('reprodução determinística e vínculo parental',()=>{const p=G.create({genes:{skeleton:'Exoesqueleto',legs:4,brain:'Estratégico'}},{id:'pai',generation:2});const a=G.reproduce(p,p,123),b=G.reproduce(p,p,123);assert.equal(a.organism.generation,3);assert.equal(a.organism.parentIds[0],'pai');assert.deepEqual(a.organism.genes,b.organism.genes);assert.deepEqual(a.mutation,b.mutation)});
+test('fenótipo anatômico afeta atributos evolutivos',()=>{const g=G.create({genes:{skeleton:'Exoesqueleto',legs:6,muscle:4,brain:'Estratégico'}},{id:'teste'});const s={dna:{body:{limbs:0,mass:.2},locomotion:{speed:.2,modes:new Set()},defense:{armor:0},metabolism:{cost:.2},intelligence:{learning:0},reproduction:{},traits:[]}};G.applyToSpecies(g,s);assert.equal(s.geneticIdentity,'teste');assert.equal(s.dna.body.limbs,6);assert(s.dna.defense.armor>=.7);assert(s.dna.intelligence.learning>=.89)});
+console.log(`${tests.length} testes Sprint 3B aprovados:`);tests.forEach(x=>console.log('✓ '+x));
