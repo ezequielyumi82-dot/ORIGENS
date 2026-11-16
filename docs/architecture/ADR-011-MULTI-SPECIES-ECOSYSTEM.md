@@ -29,10 +29,10 @@ A camada é separada do Integrated Evolution v0.1 para preservar seu contrato e 
 
 ### Limitações aceitas
 - Competição indireta por um recurso escalar, sem competição por nicho ou recursos múltiplos.
-- Sem predação, teias alimentares, dispersão ou especiação automática.
-- Uma linhagem por espécie no escopo inicial.
-- Sem partição de cópias alélicas na transição de especiação; esse procedimento deve preservar exatamente os indivíduos e as cópias de cada locus antes de ser habilitado.
+- Sem predação, teias alimentares ou múltiplos recursos.
+- A observação de especiação ainda é fornecida externamente; não há detector automático.
+- A partição pós-especiação foi implementada em ADR-012, com amostragem alélica sem reposição e conservação por locus.
 
 ## Próxima decisão
 
-Projetar a partição pós-especiação como transação atômica: repartir população por habitat, copiar indivíduos sem duplicação, separar cópias alélicas por locus, criar identidade descendente e validar conservação de população e alelos. Só então conectar a observação de especiação ao ecossistema multiespécie.
+Ampliar o ambiente para múltiplos recursos e, depois, introduzir relações tróficas sem duplicar estoques ou energia. A partição pós-especiação está tratada no ADR-012.
