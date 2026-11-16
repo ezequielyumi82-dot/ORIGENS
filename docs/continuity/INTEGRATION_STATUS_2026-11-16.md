@@ -129,3 +129,7 @@ Foi criado \`integrated-evolution.js\` como coordenador experimental de Populati
 - Limite deliberado: v0.1 começa com uma espécie e uma linhagem. Após especiação, o estado fica em \`species_partition_required\`; não avança até existir partição multiespécie real. Isso evita misturar pools genéticos ou duplicar recursos ambientais.
 - O CI foi atualizado para executar \`integrated-evolution.test.cjs\`; resultado ainda pendente para esta revisão.
 - Contrato: \`docs/architecture/INTEGRATED_EVOLUTION_V0.1.md\`; decisão: \`ADR-010\`.
+
+- CI final desta etapa: run \`43934234316\`, conclusão \`success\`, commit \`ffbb81a61181d8d7ee870b07eefe663b216527b2\`.
+- Suítes aprovadas neste run: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14), Lineage Dynamics (14) e Integrated Evolution (15). Total: 57 testes JavaScript aprovados.
+- As primeiras execuções do novo coordenador encontraram duas expectativas incorretas nos testes: desempate lexicográfico e deriva genética estocástica em habitats com frequências inicialmente semelhantes. Os cenários foram corrigidos para refletir o contrato determinístico e para testar frequências realmente invariantes; o run final passou.
