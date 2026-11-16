@@ -13,7 +13,7 @@ Este repositório passa a ser a referência central do projeto. A integração s
 | Documentação científica e roadmap geológico | `gemini-code-1785857912392.md` | Preservada como referência estratégica; requer reconciliação com o plano de implementação |
 | CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo e dos módulos experimentais de dinâmica populacional e genética |
 | Dinâmica populacional experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/population-dynamics.js` | Modelo agregado isolado; não integrado à interface nem ao núcleo C# |
-| Dinâmica genética experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/genetic-dynamics.js` | Mutação, seleção alélica, deriva e fluxo gênico agregados; não integrado à ecologia nem ao núcleo C# |
+| Dinâmica genética experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/genetic-dynamics.js` | Mutação, seleção alélica, deriva e fluxo gênico; adaptador experimental com a ecologia; não integrado ao núcleo C# |
 
 > **Integridade do estado:** a solução C# recuperada contém 7 projetos e uma suíte NUnit. O pacote de continuidade informa que build e testes ainda não haviam sido executados por ausência do SDK .NET no ambiente original. Portanto, não se deve considerar o núcleo C# compilado ou validado até que a CI confirme isso após sua integração.
 
