@@ -52,3 +52,11 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - Run tests with \`node lineage-dynamics.test.cjs\`.
 - This module is experimental and is not yet connected to the ecology/genetics modules, browser UI or authoritative C# engine. Thresholds are heuristic, not scientifically calibrated.
 - Full contract: \`../../docs/architecture/LINEAGE_DYNAMICS_V0.1.md\`.
+
+
+## Integrated Evolution v0.1 (experimental)
+- \`integrated-evolution.js\` coordinates one ecology tick, the genetics adapter and lineage updates.
+- It derives a per-habitat genetic-divergence indicator from allele frequencies and uses a simplified geographic-isolation proxy.
+- The coordinator currently supports one species and one lineage. It pauses after speciation with \`species_partition_required\` until multi-species population/genetic partitioning is implemented.
+- Run tests with \`node integrated-evolution.test.cjs\`.
+- Contract and limitations: \`../../docs/architecture/INTEGRATED_EVOLUTION_V0.1.md\`.
