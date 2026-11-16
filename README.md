@@ -43,6 +43,7 @@ O protótipo web é uma referência funcional e histórica; não será confundid
 - [Estado da integração de 16/11/2026](docs/continuity/INTEGRATION_STATUS_2026-11-16.md)
 - [Estrutura e governança do repositório](docs/architecture/REPOSITORY_STRUCTURE.md)
 - [Dinâmica populacional experimental v0.1](docs/architecture/POPULATION_DYNAMICS_V0.1.md)
+- [ADR-007 — Decisão do modelo populacional](docs/architecture/ADR-007-POPULATION-DYNAMICS.md)
 
 ## Princípios de desenvolvimento
 
