@@ -143,6 +143,7 @@
     return { ...state, tick: state.tick + 1, rngState: random.state, habitats: evolved };
   }
   function stepWithEcology(state, previousWorld, nextWorld) {
+    if (!state || state.version !== VERSION || !Array.isArray(state.habitats)) throw new TypeError('Estado genético incompatível.');
     if (!previousWorld || !nextWorld || !Array.isArray(previousWorld.habitats) || !Array.isArray(nextWorld.habitats)) {
       throw new TypeError('São necessários os estados ecológicos anterior e posterior.');
     }
