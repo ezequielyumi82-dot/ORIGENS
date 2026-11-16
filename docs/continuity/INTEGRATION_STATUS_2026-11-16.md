@@ -117,3 +117,15 @@ Foi criado o módulo experimental \`lineage-dynamics.js\` para identidade persis
 - CI final observada: run \`43932525139\`, conclusão \`success\`; job \`Web prototype — Node.js tests\`.
 - As quatro suítes foram executadas no mesmo job: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14, incluindo os 3 testes do adaptador) e Lineage Dynamics (14).
 - Total confirmado: 42 testes aprovados. Isso valida o comportamento coberto pelas suítes JavaScript; não equivale a validação científica nem a build/teste do núcleo C#.
+
+
+## Desenvolvimento adicional — Integrated Evolution v0.1
+
+Foi criado \`integrated-evolution.js\` como coordenador experimental de Population Dynamics, Genetic Dynamics e Lineage Dynamics.
+
+- Um passo avança a ecologia, sincroniza o pool genético via \`stepWithEcology\`, atualiza população por habitat na linhagem e deriva um indicador de divergência das frequências alélicas.
+- O isolamento espacial é um proxy simples: o habitat candidato não pode ter vizinhos ocupados pela mesma linhagem.
+- Foram adicionados testes para sincronização, divergência derivada, isolamento espacial, especiação, pausa segura, extinção, conservação de população, validação e imutabilidade.
+- Limite deliberado: v0.1 começa com uma espécie e uma linhagem. Após especiação, o estado fica em \`species_partition_required\`; não avança até existir partição multiespécie real. Isso evita misturar pools genéticos ou duplicar recursos ambientais.
+- O CI foi atualizado para executar \`integrated-evolution.test.cjs\`; resultado ainda pendente para esta revisão.
+- Contrato: \`docs/architecture/INTEGRATED_EVOLUTION_V0.1.md\`; decisão: \`ADR-010\`.
