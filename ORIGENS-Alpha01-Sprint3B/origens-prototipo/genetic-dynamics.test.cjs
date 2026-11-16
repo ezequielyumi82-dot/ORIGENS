@@ -57,5 +57,10 @@ testCase('ecology adapter rejects stale or mismatched ecological states', () => 
   assert.throws(() => Genetics.stepWithEcology({ ...genetics, speciesId:'bear' }, previous, next), /Identidade de espécie/);
 });
 
+
+test('partitions allele copies without replacement and conserves each locus',()=>{const state=Genetics.createState({seed:19,speciesId:'parent',habitats:[{id:'forest',population:10,alleleCounts:{coat:{A:12,a:8},size:{L:4,S:16}}}]});const split=Genetics.partitionState(state,{childSpeciesId:'child',childPopulations:{forest:4}});assert.equal(split.parentState.habitats[0].population,6);assert.equal(split.childState.habitats[0].population,4);for(const locus of ['coat','size']){const before=state.habitats[0].alleleCounts[locus],p=split.parentState.habitats[0].alleleCounts[locus],c=split.childState.habitats[0].alleleCounts[locus];for(const allele of Object.keys(before))assert.equal(p[allele]+c[allele],before[allele]);assert.equal(Object.values(p).reduce((a,b)=>a+b,0),12);assert.equal(Object.values(c).reduce((a,b)=>a+b,0),8);}});
+test('genetic partition is deterministic and does not mutate the ancestral pool',()=>{const state=Genetics.createState({seed:31,speciesId:'parent',habitats:[{id:'forest',population:10,alleleCounts:{coat:{A:10,a:10}}}]});const before=structuredClone(state),a=Genetics.partitionState(state,{childSpeciesId:'child',childPopulations:{forest:3}}),b=Genetics.partitionState(state,{childSpeciesId:'child',childPopulations:{forest:3}});assert.deepEqual(a,b);assert.deepEqual(state,before);});
+test('rejects a partition larger than the available habitat population',()=>{const state=Genetics.createState({speciesId:'parent',habitats:[{id:'forest',population:2,alleleCounts:{coat:{A:4}}}]});assert.throws(()=>Genetics.partitionState(state,{childSpeciesId:'child',childPopulations:{forest:3}}),/excede a população/);});
+
 console.log(`${tests.length} testes Genetic Dynamics aprovados:`);
 tests.forEach(name => console.log(`✓ ${name}`));
