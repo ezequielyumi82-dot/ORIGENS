@@ -40,6 +40,7 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 ## Genetic Dynamics v0.1 (experimental)
 - `genetic-dynamics.js` models aggregate diploid allele-copy evolution by habitat using selection, mutation, finite-population drift and explicit gene-flow transfers.
 - Each locus must contain exactly two allele copies per individual. Migration inputs must be synchronized with the ecology's final population counts.
+- `stepWithEcology` sincroniza ticks ecológicos consecutivos e transporta cópias alélicas nos eventos de recolonização/migração.
 - Run tests with `node genetic-dynamics.test.cjs`.
 - The model uses simplified allele-level fitness and does not represent individual genotypes, dominance, recombination or new allele creation. It is not scientifically calibrated and is not yet connected to Population Dynamics or the authoritative C# engine.
 - Full contract: `../../docs/architecture/GENETIC_DYNAMICS_V0.1.md`.
