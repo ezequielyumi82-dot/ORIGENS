@@ -24,6 +24,8 @@ O repositório `ezequielyumi82-dot/ORIGENS` foi aprovado como referência centra
 Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo Alpha, com estado agregado por habitat, regeneração de recursos, pressão de capacidade de suporte, nascimentos, mortes, extinção local/global e recolonização a partir de refúgios adjacentes. Também foi adicionada a função de métricas de diversidade (riqueza alélica, heterozigosidade esperada e entropia de Shannon) a partir de contagens fornecidas.
 
 - Testes locais executados nesta sessão: 9/9 aprovados com Node.js 22.16.0.
+- Testes existentes do Sprint 3B executados localmente: 3/3 aprovados.
+- CI do GitHub Actions após a correção do workflow: sucesso, executando as duas suítes (3 testes genéticos + 9 testes populacionais).
 - A suíte foi adicionada ao workflow GitHub Actions.
 - O módulo permanece experimental, sem integração à interface e sem integração ao núcleo C#; as taxas não são calibradas cientificamente.
 - A diversidade é medida, mas mutação, deriva e seleção genética ainda não atualizam frequências alélicas neste módulo.
@@ -34,6 +36,10 @@ Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo
 - Estrutura de documentação e regras de integração.
 - CI inicial para executar os testes Node.js já existentes no protótipo.
 - Preservação dos arquivos e diretórios atuais do protótipo e da baseline geológica.
+
+## Workflow .NET e motivo de bloqueio atual
+
+O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do restore porque o diretório de trabalho `engines/dotnet/` ainda não existe no branch. Isso confirma a pendência de importação, não uma falha de compilação C#. O workflow foi ajustado para executar automaticamente apenas quando houver conteúdo em `engines/dotnet/`; não há build ou teste NUnit declarado como aprovado.
 
 ## Pendências que não devem ser mascaradas
 
