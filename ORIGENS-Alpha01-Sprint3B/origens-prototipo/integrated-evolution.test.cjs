@@ -49,7 +49,7 @@ test('one integrated tick advances ecology, genetics and lineages together', () 
 test('derives divergence from allele frequencies rather than a caller-provided value', () => {
   const next = Integrated.step(Integrated.createSimulation(baseConfig({ threshold: 0.1 })));
   assert(next.lastDiagnostics.geneticDivergence > 0.9);
-  assert.equal(next.lastDiagnostics.isolatedHabitatId, 'island');
+  assert.equal(next.lastDiagnostics.isolatedHabitatId, 'forest');
 });
 test('speciation waits for configured consecutive integrated ticks', () => {
   const config = baseConfig({ threshold: 0.2, minTicks: 2 });
