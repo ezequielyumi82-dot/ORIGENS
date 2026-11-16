@@ -133,3 +133,18 @@ Foi criado \`integrated-evolution.js\` como coordenador experimental de Populati
 - CI final desta etapa: run \`43934234316\`, conclusão \`success\`, commit \`ffbb81a61181d8d7ee870b07eefe663b216527b2\`.
 - Suítes aprovadas neste run: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14), Lineage Dynamics (14) e Integrated Evolution (15). Total: 57 testes JavaScript aprovados.
 - As primeiras execuções do novo coordenador encontraram duas expectativas incorretas nos testes: desempate lexicográfico e deriva genética estocástica em habitats com frequências inicialmente semelhantes. Os cenários foram corrigidos para refletir o contrato determinístico e para testar frequências realmente invariantes; o run final passou.
+
+
+## Desenvolvimento adicional — Multi-Species Ecosystem v0.1
+
+Foi implementada uma camada experimental multiespécie separada do Integrated Evolution v0.1, sem alterar o contrato do coordenador anterior.
+
+- Os habitats e seus estoques de recursos são únicos e compartilhados entre as espécies.
+- A demanda é agregada por habitat; a satisfação de recursos é calculada uma vez e aplicada a todas as espécies presentes.
+- Cada espécie mantém população por habitat, pool genético independente e identidade de linhagem exclusiva.
+- Os ticks atualizam genética e registro de linhagens em sincronia; extinção de uma espécie não encerra as demais nem remove o habitat.
+- Foram adicionados 10 cenários de teste para recursos compartilhados, competição, separação dos pools genéticos, sincronização de linhagens, extinção específica, determinismo, imutabilidade e validações.
+- Contrato: `docs/architecture/MULTI_SPECIES_ECOSYSTEM_V0.1.md`; decisão: `ADR-011`.
+- Limites: competição indireta por recurso escalar; sem predação, teias alimentares, dispersão, recolonização ou especiação automática. A partição pós-especiação ainda precisa conservar indivíduos e cópias alélicas sem duplicação.
+- A suíte foi adicionada ao GitHub Actions. A aprovação final da CI desta revisão ainda precisa ser observada.
+- A integração C#/.NET e os testes NUnit continuam pendentes, conforme decisão anterior.
