@@ -45,7 +45,7 @@ Foi criado o módulo experimental isolado `genetic-dynamics.js`, com representa�
 
 Foi adicionado `stepWithEcology` ao módulo genético. O adaptador recebe estados ecológicos de ticks consecutivos, verifica identidade da espécie, habitats e população de entrada, sincroniza a população genética com o estado ecológico posterior e converte eventos `population.recolonized`/`population.migrated` em transferências de cópias alélicas. Eventos demográficos de nascimento e morte ajustam o tamanho do pool conforme a população final do habitat.
 
-- Foram adicionados 3 testes de recolonização com transferência genética, sincronização após mudança demográfica e rejeição de estado ecológico incompatível. A execução desta nova suíte ainda não foi confirmada por uma nova execução de CI; não declarar esses testes aprovados até a verificação.
+- Foram adicionados 3 testes de recolonização com transferência genética, sincronização após mudança demográfica e rejeição de estado ecológico incompatível. Os 3 testes foram executados e aprovados na CI posterior, dentro da suíte Genetic Dynamics (14/14).
 - A migração é processada na ordem dos eventos ecológicos; estado incompatível ou evento inválido interrompe a operação.
 - O módulo populacional atual emite recolonização, mas ainda não possui dispersão geral independente de recolonização. O adaptador reconhece `population.migrated` como contrato futuro, ainda não emitido pelo motor ecológico.
 - A integração é experimental e continua fora do núcleo C# e da interface.
@@ -99,7 +99,7 @@ Foi criado o módulo experimental \`lineage-dynamics.js\` para identidade persis
 - O workflow Node.js foi atualizado para executar também essa suíte.
 - A implementação é experimental e ainda não está conectada automaticamente à ecologia, genética, interface ou núcleo C#.
 - A divergência genética e os dados de isolamento são fornecidos pelo chamador. Os limiares são heurísticos e não representam critérios taxonômicos ou científicos universais.
-- A nova suíte ainda aguarda execução de CI após esta alteração; não declarar aprovação antes de consultar o resultado.
+- CI GitHub Actions run `43932525139`: `success`, executando as quatro suítes Node.js no commit `fa43c90dacde0f937b9dbb128984d429a86c3dea`.
 
 ## Próximas pendências evolutivas
 
@@ -108,3 +108,12 @@ Foi criado o módulo experimental \`lineage-dynamics.js\` para identidade persis
 3. Criar adaptador que derive observações de linhagem a partir dos estados ecológico e genético, sem duplicar ou inventar população.
 4. Definir persistência/versionamento e portar os contratos estáveis para C# após importar a solução Stage 4.
 5. Manter os critérios experimentais explicitamente separados de alegações de realismo científico.
+
+
+## Verificação final da etapa de linhagens
+
+- A revisão adicional encontrou e corrigiu uma incompatibilidade entre a validação antecipada da divisão e o teste de observação que não atende aos critérios de isolamento. A validação de consistência da divisão agora ocorre somente depois que a observação satisfaz os critérios mínimos.
+- Foram acrescentadas proteções contra ciclos de ancestralidade, população isolada maior que a população disponível, divisão maior que o grupo isolado e atualizações duplicadas.
+- CI final observada: run \`43932525139\`, conclusão \`success\`; job \`Web prototype — Node.js tests\`.
+- As quatro suítes foram executadas no mesmo job: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14, incluindo os 3 testes do adaptador) e Lineage Dynamics (14).
+- Total confirmado: 42 testes aprovados. Isso valida o comportamento coberto pelas suítes JavaScript; não equivale a validação científica nem a build/teste do núcleo C#.
