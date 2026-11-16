@@ -87,7 +87,7 @@
     });
     // Recolonization is possible only from a surviving neighboring refuge.
     for (const target of habitats) {
-      if (originalPopulations.get(target.id) !== 0 || target.population !== 0 || target.resources < world.recolonizationResourceThreshold) continue;
+      if (originalPopulations.get(target.id) !== 0 || target.population !== 0 || target.resources < world.recolonizationResourceThreshold || Math.floor(target.carryingCapacity * target.resources) < 1) continue;
       const sources = target.neighbors.map(id => habitats.find(h => h.id === id)).filter(h => h && h.population > 1).sort((a, b) => a.id.localeCompare(b.id));
       if (sources.length && random.next() < world.migrationRate) {
         const source = sources[0];
@@ -106,7 +106,7 @@
     let richness = 0, heterozygosity = 0, entropy = 0, measured = 0;
     for (const [, counts] of loci) {
       if (!counts || typeof counts !== 'object' || Array.isArray(counts)) throw new TypeError('Contagem de alelos inválida.');
-      const values = Object.values(counts).map(v => finite(v, 'allele count'));
+      const values = Object.values(counts).map(v => { const count = finite(v, 'allele count'); if (!Number.isSafeInteger(count)) throw new RangeError('Contagem de alelos deve ser inteira.'); return count; });
       const total = values.reduce((sum, value) => sum + value, 0);
       if (total === 0) continue;
       const frequencies = values.filter(v => v > 0).map(v => v / total);
