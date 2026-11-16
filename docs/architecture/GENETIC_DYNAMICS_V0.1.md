@@ -10,6 +10,7 @@ Arquivo: `genetic-dynamics.js`.
 
 - `createState(config)`: valida população, loci, contagens e parâmetros; ordena habitats e alelos.
 - `step(state, options)`: executa um passo genético determinístico, devolvendo novo estado sem alterar o original.
+- `stepWithEcology(state, previousWorld, nextWorld)`: adaptador que consome dois ticks ecológicos consecutivos, sincroniza populações finais e converte eventos de recolonização/migração em fluxo gênico.
 - `frequencies(state)`: retorna frequências alélicas por habitat e locus.
 
 ## Formato dos dados
@@ -24,6 +25,12 @@ Configuração opcional:
 `step` aceita ainda:
 - `populations`: população final por habitat, permitindo sincronizar o resultado do motor ecológico;
 - `migrations`: lista de transferências `{ sourceHabitatId, targetHabitatId, individuals }`. As populações informadas devem representar o estado depois das migrações.
+
+## Integração com a ecologia
+
+O adaptador `stepWithEcology` recebe o estado genético anterior e os estados ecológicos anterior/posterior. Ele exige ticks consecutivos, identidade de espécie igual e conjunto de habitats idêntico. Também exige que as populações genéticas de entrada coincidam com as populações do mundo ecológico anterior. As populações finais são copiadas do mundo ecológico posterior; eventos `population.recolonized` e `population.migrated` do tick processado são convertidos em transferências de indivíduos e suas cópias alélicas.
+
+O adaptador falha explicitamente diante de estado desatualizado ou evento de migração inválido, em vez de tentar reconciliar dados silenciosamente. Eventos de nascimento e morte alteram o tamanho do pool genético via população final, sem criar uma migração artificial.
 
 ## Mecanismos
 
@@ -46,10 +53,10 @@ Configuração opcional:
 - Sem dominância, epistasia, ligação, recombinação, mutações direcionais ou surgimento de novos alelos.
 - Seleção atua sobre aptidão alélica relativa, uma simplificação que não equivale à seleção fenotípica/genotípica real.
 - Deriva e mutação usam amostragem por cópia; populações muito grandes podem ter custo linear no número de cópias.
-- Migração é informada externamente e ainda não consome automaticamente os eventos do módulo `population-dynamics.js`.
+- O adaptador consome recolonizações e eventos `population.migrated`; o módulo ecológico atual só produz recolonizações como evento de migração. Outros tipos de migração ainda precisam ser modelados explicitamente.
 - Não há calibração empírica nem validação biológica. Não usar para inferência científica.
 - Evolução e persistência ainda não foram integradas ao C#; schema/save/replay precisam ser definidos antes de persistência autoritativa.
 
 ## Próxima integração recomendada
 
-Criar um adaptador que converta eventos de migração e populações finais do módulo ecológico para `step`, definir uma identidade de espécie/locus versionada e, depois, portar os contratos para C# junto de snapshots, journal e migrações de schema. Antes disso, revisar o modelo com cenários de gargalo, populações pequenas, perda/fixação de alelos e sensibilidade dos parâmetros.
+Definir identidade de espécie/locus versionada, adicionar cenários de gargalo e extinção com perda/fixação de alelos e, depois, portar os contratos para C# junto de snapshots, journal e migrações de schema. Antes disso, revisar o modelo com cenários de gargalo, populações pequenas, perda/fixação de alelos e sensibilidade dos parâmetros.
