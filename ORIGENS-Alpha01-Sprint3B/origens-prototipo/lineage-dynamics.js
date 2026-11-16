@@ -106,6 +106,14 @@
     for (const lineage of state.lineages) {
       if (!speciesIds.has(lineage.speciesId)) throw new Error('Espécie ausente para linhagem ' + lineage.id);
       if (lineage.parentLineageId && !lineageIds.has(lineage.parentLineageId)) throw new Error('Ancestral ausente para linhagem ' + lineage.id);
+      const ancestry = new Set([lineage.id]);
+      let ancestorId = lineage.parentLineageId;
+      while (ancestorId) {
+        if (ancestry.has(ancestorId)) throw new Error('Ciclo detectado na ancestralidade das linhagens.');
+        ancestry.add(ancestorId);
+        const ancestor = state.lineages.find(item => item.id === ancestorId);
+        ancestorId = ancestor ? ancestor.parentLineageId : null;
+      }
     }
     for (const population of state.populations) {
       if (!lineageIds.has(population.lineageId)) throw new Error('População referencia linhagem ausente.');
@@ -124,8 +132,11 @@
     const populationById = new Map(populations.map(item => [item.lineageId, item]));
     const speciesById = new Map(species.map(item => [item.id, item]));
 
+    const updatedLineages = new Set();
     for (const update of options.populationUpdates || []) {
       if (!update || !lineageById.has(update.lineageId)) throw new Error('Atualização referencia linhagem inexistente.');
+      if (updatedLineages.has(update.lineageId)) throw new Error('Atualização populacional duplicada para linhagem.');
+      updatedLineages.add(update.lineageId);
       const population = populationById.get(update.lineageId);
       population.byHabitat = normalizeCounts(update.byHabitat || {}, 'populationUpdates.' + update.lineageId);
     }
@@ -153,6 +164,10 @@
       const isolatedPopulation = integer(observation.isolatedPopulation, 'isolatedPopulation');
       const counts = normalizeCounts(observation.splitByHabitat || {}, 'splitByHabitat');
       const candidateCount = total(counts);
+      const availablePopulation = total(populationById.get(parent.id).byHabitat);
+      if (isolatedPopulation > availablePopulation || candidateCount > isolatedPopulation) {
+        throw new RangeError('A divisão excede a população isolada observada ou a população disponível.');
+      }
       const qualifies = divergence >= state.speciation.geneticDivergenceThreshold &&
         isolatedPopulation >= state.speciation.minIsolatedPopulation &&
         candidateCount >= state.speciation.minIsolatedPopulation;
