@@ -5,7 +5,8 @@ on:
     branches: [main, "integration/**"]
     paths:
       - "ORIGENS-Alpha01-Sprint3B/origens-prototipo/**"
-      - ".github/workflows/ci.yml"\n      - "docs/architecture/POPULATION_DYNAMICS_V0.1.md"
+      - ".github/workflows/ci.yml"
+      - "docs/architecture/POPULATION_DYNAMICS_V0.1.md"
   pull_request:
     branches: [main]
     paths:
@@ -27,6 +28,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run genetic-core tests
+      - name: Run prototype and population tests
         working-directory: ORIGENS-Alpha01-Sprint3B/origens-prototipo
-        run: |\n          node tests-node.cjs\n          node population-dynamics.test.cjs
+        run: |
+          node tests-node.cjs
+          node population-dynamics.test.cjs
