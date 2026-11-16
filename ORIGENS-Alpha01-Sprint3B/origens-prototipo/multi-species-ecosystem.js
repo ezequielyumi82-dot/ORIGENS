@@ -94,7 +94,7 @@
     }
     return true;
   }
-  function step(state) {
+  function step(state, options = {}) {
     validateEcosystem(state);
     const rng = new Random(state.rngState);
     const habitats = state.habitats.map(h=>({ ...h, neighbors:[...h.neighbors], resources:Math.min(h.maxResources,h.resources+h.regeneration) }));
@@ -122,8 +122,31 @@
       if(total===0 && previousTotal>0) events.push({type:'ecosystem.species_extinct',tick:state.tick,speciesId:s.id,lineageId:s.lineageId});
     }
     const nextTick=state.tick+1;
-    const nextLineages=Lineages.step(state.lineages,{populationUpdates:species.map(s=>({lineageId:s.lineageId,byHabitat:{...s.populations}}))});
-    const next={...state,tick:nextTick,rngState:rng.state,habitats,species,lineages:nextLineages,events:[...state.events,...events],lastDiagnostics:diagnostics};
+    const nextLineages=Lineages.step(state.lineages,{
+      populationUpdates:species.map(s=>({lineageId:s.lineageId,byHabitat:{...s.populations}})),
+      observations: options.observations || []
+    });
+    const speciationEvents=nextLineages.events.filter(e=>e.type==='speciation'&&e.tick===nextTick);
+    for(const event of speciationEvents){
+      const parent=species.find(s=>s.id===event.parentSpeciesId);
+      if(!parent) throw new Error('Espécie ancestral não encontrada para concluir a especiação.');
+      const childLineage=nextLineages.lineages.find(l=>l.id===event.lineageId);
+      const childPopulation=nextLineages.populations.find(p=>p.lineageId===event.lineageId);
+      if(!childLineage||!childPopulation) throw new Error('Registro descendente incompleto após especiação.');
+      const partition=Genetics.partitionState(parent.genetics,{childSpeciesId:event.speciesId,childPopulations:childPopulation.byHabitat});
+      parent.genetics=partition.parentState;
+      parent.populations=Object.fromEntries(partition.parentState.habitats.map(h=>[h.id,h.population]));
+      const childSpeciesRecord=nextLineages.species.find(s=>s.id===event.speciesId);
+      const child={
+        id:event.speciesId,name:childSpeciesRecord?.name??null,parentSpeciesId:event.parentSpeciesId,
+        lineageId:event.lineageId,populations:Object.fromEntries(partition.childState.habitats.map(h=>[h.id,h.population])),
+        resourceUse:parent.resourceUse,reproductionRate:parent.reproductionRate,mortalityRate:parent.mortalityRate,
+        shortageMortality:parent.shortageMortality,genetics:partition.childState
+      };
+      species.push(child);
+      events.push({...event,type:'ecosystem.speciation'});
+    }
+    const next={...state,tick:nextTick,rngState:rng.state,habitats,species:species.sort((a,b)=>a.id.localeCompare(b.id)),lineages:nextLineages,events:[...state.events,...events],lastDiagnostics:diagnostics};
     validateEcosystem(next);
     return next;
   }
