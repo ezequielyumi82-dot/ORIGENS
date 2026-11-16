@@ -36,3 +36,4 @@ jobs:
           node tests-node.cjs
           node population-dynamics.test.cjs
           node genetic-dynamics.test.cjs
+          node lineage-dynamics.test.cjs
