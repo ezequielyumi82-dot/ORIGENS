@@ -17,5 +17,45 @@ testCase('demographic population changes resize the gene pool', () => { const ne
 testCase('migration changes local frequencies while retaining the global gene pool', () => { const s = Genetics.createState({ seed: 2, habitats: [{ id:'source', population:10, alleleCounts:{ coat:{ A:20, a:0 } } }, { id:'sink', population:10, alleleCounts:{ coat:{ A:0, a:20 } } }] }); const baseline = Genetics.step(s); const migrated = Genetics.step(s, { populations:{ source:5, sink:15 }, migrations:[{ sourceHabitatId:'source', targetHabitatId:'sink', individuals:5 }] }); assert(migrated.habitats.find(h=>h.id==='sink').alleleCounts.coat.A > baseline.habitats.find(h=>h.id==='sink').alleleCounts.coat.A); });
 testCase('frequency report is normalized', () => { const f = Genetics.frequencies(seed()); assert.equal(f.a.coat.A + f.a.coat.a,1); });
 testCase('rejects migration that exceeds available population', () => assert.throws(() => Genetics.step(seed(), { migrations: [{ sourceHabitatId:'a', targetHabitatId:'b', individuals:100 }] }), RangeError));
+
+testCase('ecology adapter transfers genes during recolonization', () => {
+  const ecology = require('./population-dynamics.js');
+  const previous = ecology.createWorld({ seed: 3, speciesId: 'fox', migrationRate: 1, habitats: [
+    { id:'refuge', population:20, carryingCapacity:20, resources:1, resourceRegeneration:0, reproductionRate:0, mortalityRate:0, neighbors:['empty'] },
+    { id:'empty', population:0, carryingCapacity:10, resources:1, resourceRegeneration:0, reproductionRate:0, mortalityRate:0, neighbors:['refuge'] }
+  ] });
+  const genetics = Genetics.createState({ seed: 8, speciesId:'fox', habitats: [
+    { id:'refuge', population:20, alleleCounts:{ coat:{ A:40, a:0 } } },
+    { id:'empty', population:0, alleleCounts:{ coat:{ A:0, a:0 } } }
+  ] });
+  const nextEcology = ecology.step(previous);
+  const nextGenetics = Genetics.stepWithEcology(genetics, previous, nextEcology);
+  assert.equal(nextGenetics.habitats.find(h=>h.id==='empty').population,1);
+  assert.equal(nextGenetics.habitats.find(h=>h.id==='empty').alleleCounts.coat.A,2);
+  assert.equal(nextGenetics.habitats.find(h=>h.id==='refuge').population,19);
+  assert.equal(nextGenetics.habitats.reduce((n,h)=>n+h.alleleCounts.coat.A,0),40);
+});
+testCase('ecology adapter synchronizes demographic population changes', () => {
+  const ecology = require('./population-dynamics.js');
+  const previous = ecology.createWorld({ seed: 12, speciesId:'lynx', habitats:[
+    { id:'valley', population:10, carryingCapacity:10, resources:0, resourceRegeneration:0, reproductionRate:0, mortalityRate:0.5 }
+  ]});
+  const genetics = Genetics.createState({ seed:12, speciesId:'lynx', habitats:[
+    { id:'valley', population:10, alleleCounts:{ coat:{ A:10, a:10 } } }
+  ]});
+  const nextEcology = ecology.step(previous);
+  const nextGenetics = Genetics.stepWithEcology(genetics, previous, nextEcology);
+  assert.equal(nextGenetics.habitats[0].population,nextEcology.habitats[0].population);
+  assert.equal(Object.values(nextGenetics.habitats[0].alleleCounts.coat).reduce((a,b)=>a+b,0),nextGenetics.habitats[0].population*2);
+});
+testCase('ecology adapter rejects stale or mismatched ecological states', () => {
+  const ecology = require('./population-dynamics.js');
+  const previous = ecology.createWorld({ speciesId:'wolf', habitats:[{ id:'forest', population:2, carryingCapacity:2 }] });
+  const genetics = Genetics.createState({ speciesId:'wolf', habitats:[{ id:'forest', population:2, alleleCounts:{ coat:{ A:2, a:2 } } }] });
+  const next = ecology.step(previous);
+  assert.throws(() => Genetics.stepWithEcology(genetics, previous, { ...next, tick: next.tick + 1 }), RangeError);
+  assert.throws(() => Genetics.stepWithEcology({ ...genetics, speciesId:'bear' }, previous, next), /Identidade de espécie/);
+});
+
 console.log(`${tests.length} testes Genetic Dynamics aprovados:`);
 tests.forEach(name => console.log(`✓ ${name}`));
