@@ -156,3 +156,20 @@ Foi implementada uma camada experimental multiespécie separada do Integrated Ev
 - O job executou as seis suítes: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14), Lineage Dynamics (14), Integrated Evolution (15) e Multi-Species Ecosystem (10). Total: **67 testes JavaScript aprovados**.
 - A suíte nova verificou demanda e consumo compartilhados, satisfação ambiental comum, pools genéticos independentes, sincronização do registro de linhagens, extinção de uma espécie sem encerrar as demais, determinismo, imutabilidade e validações.
 - Esta aprovação não cobre C#/.NET, NUnit, integração com interface, predação, redes tróficas nem especiação com partição genética.
+
+
+## Desenvolvimento adicional — Partição pós-especiação v0.1
+
+Foi implementada a transição de uma linhagem para uma espécie descendente no ecossistema multiespécie.
+
+- Genetic Dynamics agora oferece `partitionState`: para cada locus, sorteia sem reposição duas cópias alélicas por indivíduo transferido; o restante permanece no pool ancestral.
+- Multi-Species Ecosystem.step aceita observações fornecidas pelo chamador e, quando Lineage Dynamics confirma especiação, cria a espécie descendente, atualiza a ancestral e separa os pools genéticos.
+- A população é transferida por habitat sem criar ou perder indivíduos; as cópias alélicas são conservadas exatamente por habitat e locus.
+- A espécie descendente herda parâmetros demográficos da ancestral, mas recebe pool genético e identidade de linhagem próprios.
+- Habitats e recursos permanecem únicos e compartilhados; não são duplicados durante a especiação.
+- A observação de divergência/isolamento ainda é fornecida externamente. Não foi implementado detector automático de especiação.
+- Foram adicionados 3 testes ao Genetic Dynamics e 4 ao Multi-Species Ecosystem. CI final run `43939843676`, commit `5e613d81172a82778d11a5a9f2e4c574f774e984`: `success`.
+- Suítes aprovadas: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (17), Lineage Dynamics (14), Integrated Evolution (15) e Multi-Species Ecosystem (14). Total: **74 testes JavaScript aprovados**.
+- Contrato: `docs/architecture/POST_SPECIATION_PARTITION_V0.1.md`; decisão: ADR-012.
+- Limitações: partição independente por locus sem genótipos individuais, fase, ligação ou recombinação; sem múltiplos recursos, predação ou redes alimentares.
+- C#/.NET e NUnit continuam pendentes, conforme decisão anterior.
