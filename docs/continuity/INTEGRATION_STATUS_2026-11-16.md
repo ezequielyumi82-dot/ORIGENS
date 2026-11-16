@@ -41,6 +41,15 @@ Foi criado o módulo experimental isolado `genetic-dynamics.js`, com representa�
 - O módulo não está integrado automaticamente ao módulo ecológico nem ao núcleo C#. A migração é fornecida explicitamente pelo chamador, com as populações finais por habitat.
 - Limitações: sem genótipos individuais, dominância, recombinação, ligação, mutação direcional ou surgimento de alelos; aptidão simplificada por alelo; sem calibração científica.
 
+## Integração experimental ecologia-genética
+
+Foi adicionado `stepWithEcology` ao módulo genético. O adaptador recebe estados ecológicos de ticks consecutivos, verifica identidade da espécie, habitats e população de entrada, sincroniza a população genética com o estado ecológico posterior e converte eventos `population.recolonized`/`population.migrated` em transferências de cópias alélicas. Eventos demográficos de nascimento e morte ajustam o tamanho do pool conforme a população final do habitat.
+
+- Foram adicionados testes de recolonização com transferência genética, sincronização após mudança demográfica e rejeição de estado ecológico incompatível.
+- A migração é processada na ordem dos eventos ecológicos; estado incompatível ou evento inválido interrompe a operação.
+- O módulo populacional atual emite recolonização, mas ainda não possui dispersão geral independente de recolonização. O adaptador reconhece `population.migrated` como contrato futuro, ainda não emitido pelo motor ecológico.
+- A integração é experimental e continua fora do núcleo C# e da interface.
+
 ## O que esta branch prepara
 
 - README principal com a visão integrada e o estado real dos componentes.
@@ -66,9 +75,8 @@ O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do rest
 2. Adicionar CI .NET 8 com restore, build Release e NUnit.
 3. Corrigir erros reais de compilação/teste e registrar evidências.
 4. Formalizar os contratos de extinção local/global, recuperação populacional, diversidade genética e capacidade de suporte antes de ampliar a simulação.
-5. Criar um adaptador ecológico-genético que traduza migrações e populações finais para o contrato genético.
-6. Formalizar identidade de espécie/locus/linhagem e validar gargalos, fixação e perda de alelos.
-7. Evoluir a documentação mestre a cada etapa concluída.
+5. Formalizar identidade de espécie/locus/linhagem e validar gargalos, fixação e perda de alelos.
+6. Evoluir a documentação mestre a cada etapa concluída.
 
 ## Evidência do ambiente desta retomada
 
