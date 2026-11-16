@@ -17,7 +17,7 @@ O repositório `ezequielyumi82-dot/ORIGENS` foi aprovado como referência centra
 
 - Workflow `ORIGENS CI` executado no GitHub Actions em 16/11/2026.
 - Job `Web prototype — Node.js tests`: `success`.
-- Isso valida apenas o comando `node tests-node.cjs` no protótipo web; não valida o núcleo C#.
+- A execução mais recente cobre `node tests-node.cjs` e `node population-dynamics.test.cjs`; não valida o núcleo C#.
 
 ## Desenvolvimento adicional — Population Dynamics v0.1
 
@@ -34,7 +34,7 @@ Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo
 
 - README principal com a visão integrada e o estado real dos componentes.
 - Estrutura de documentação e regras de integração.
-- CI inicial para executar os testes Node.js já existentes no protótipo.
+- CI Node.js para as suítes do protótipo e da dinâmica populacional experimental.
 - Preservação dos arquivos e diretórios atuais do protótipo e da baseline geológica.
 
 ## Workflow .NET e motivo de bloqueio atual
@@ -44,7 +44,7 @@ O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do rest
 ## Pendências que não devem ser mascaradas
 
 1. O conteúdo da solução C#/.NET ainda precisa ser copiado do backup para `engines/dotnet/`.
-2. Não há build .NET nem execução de NUnit confirmados nesta sessão: o ambiente disponível não possui `dotnet`.
+2. Não há build .NET nem execução de NUnit confirmados nesta sessão: o SDK .NET não está instalado no ambiente local e a execução remota inicial foi interrompida antes do restore porque a pasta `engines/dotnet/` ainda não havia sido criada.
 3. A contagem de testes (27 no README do backup versus 33 ocorrências NUnit encontradas no arquivo) deve ser apurada pelo runner, não por contagem textual.
 4. O roadmap EB-320 e a implementação ecológica Alpha 0.1 precisam ser relacionados por uma arquitetura de domínios, sem assumir que um substitui o outro.
 5. Ainda não há prova de determinismo cross-platform, compatibilidade Unity 6/Android ou benchmarks.
