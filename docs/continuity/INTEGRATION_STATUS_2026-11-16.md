@@ -13,6 +13,12 @@ O repositório `ezequielyumi82-dot/ORIGENS` foi aprovado como referência centra
 - O backup de continuidade de 11/11/2026 contém uma solução .NET 8 com 7 projetos e 33 métodos/atributos de teste NUnit identificados por inspeção textual nesta retomada. O README interno do backup informa 27; essa divergência precisa ser reconciliada após compilar e enumerar os testes com o SDK.
 - O próprio pacote Stage 4 declara explicitamente que build e testes NUnit não foram executados.
 
+## Resultado de CI observado nesta integração
+
+- Workflow `ORIGENS CI` executado no GitHub Actions em 16/11/2026.
+- Job `Web prototype — Node.js tests`: `success`.
+- Isso valida apenas o comando `node tests-node.cjs` no protótipo web; não valida o núcleo C#.
+
 ## O que esta branch prepara
 
 - README principal com a visão integrada e o estado real dos componentes.
