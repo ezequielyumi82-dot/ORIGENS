@@ -19,6 +19,15 @@ O repositório `ezequielyumi82-dot/ORIGENS` foi aprovado como referência centra
 - Job `Web prototype — Node.js tests`: `success`.
 - Isso valida apenas o comando `node tests-node.cjs` no protótipo web; não valida o núcleo C#.
 
+## Desenvolvimento adicional — Population Dynamics v0.1
+
+Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo Alpha, com estado agregado por habitat, regeneração de recursos, pressão de capacidade de suporte, nascimentos, mortes, extinção local/global e recolonização a partir de refúgios adjacentes. Também foi adicionada a função de métricas de diversidade (riqueza alélica, heterozigosidade esperada e entropia de Shannon) a partir de contagens fornecidas.
+
+- Testes locais executados nesta sessão: 9/9 aprovados com Node.js 22.16.0.
+- A suíte foi adicionada ao workflow GitHub Actions.
+- O módulo permanece experimental, sem integração à interface e sem integração ao núcleo C#; as taxas não são calibradas cientificamente.
+- A diversidade é medida, mas mutação, deriva e seleção genética ainda não atualizam frequências alélicas neste módulo.
+
 ## O que esta branch prepara
 
 - README principal com a visão integrada e o estado real dos componentes.
