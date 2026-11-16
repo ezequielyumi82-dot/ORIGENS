@@ -45,10 +45,11 @@ Foi criado o módulo experimental isolado `genetic-dynamics.js`, com representa�
 
 Foi adicionado `stepWithEcology` ao módulo genético. O adaptador recebe estados ecológicos de ticks consecutivos, verifica identidade da espécie, habitats e população de entrada, sincroniza a população genética com o estado ecológico posterior e converte eventos `population.recolonized`/`population.migrated` em transferências de cópias alélicas. Eventos demográficos de nascimento e morte ajustam o tamanho do pool conforme a população final do habitat.
 
-- Foram adicionados testes de recolonização com transferência genética, sincronização após mudança demográfica e rejeição de estado ecológico incompatível.
+- Foram adicionados 3 testes de recolonização com transferência genética, sincronização após mudança demográfica e rejeição de estado ecológico incompatível. A execução desta nova suíte ainda não foi confirmada por uma nova execução de CI; não declarar esses testes aprovados até a verificação.
 - A migração é processada na ordem dos eventos ecológicos; estado incompatível ou evento inválido interrompe a operação.
 - O módulo populacional atual emite recolonização, mas ainda não possui dispersão geral independente de recolonização. O adaptador reconhece `population.migrated` como contrato futuro, ainda não emitido pelo motor ecológico.
 - A integração é experimental e continua fora do núcleo C# e da interface.
+- A última CI confirmada (run `43926116897`) antecede a implementação do adaptador; portanto, não serve como evidência de aprovação dos 3 novos testes.
 
 ## O que esta branch prepara
 
@@ -76,7 +77,8 @@ O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do rest
 3. Corrigir erros reais de compilação/teste e registrar evidências.
 4. Formalizar os contratos de extinção local/global, recuperação populacional, diversidade genética e capacidade de suporte antes de ampliar a simulação.
 5. Formalizar identidade de espécie/locus/linhagem e validar gargalos, fixação e perda de alelos.
-6. Evoluir a documentação mestre a cada etapa concluída.
+6. Executar/confirmar a CI após a integração do adaptador e corrigir eventuais falhas.
+7. Evoluir a documentação mestre a cada etapa concluída.
 
 ## Evidência do ambiente desta retomada
 
