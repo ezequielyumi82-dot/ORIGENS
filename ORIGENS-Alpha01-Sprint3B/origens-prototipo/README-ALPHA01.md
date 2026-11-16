@@ -60,3 +60,13 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - The coordinator currently supports one species and one lineage. It pauses after speciation with \`species_partition_required\` until multi-species population/genetic partitioning is implemented.
 - Run tests with \`node integrated-evolution.test.cjs\`.
 - Contract and limitations: \`../../docs/architecture/INTEGRATED_EVOLUTION_V0.1.md\`.
+
+
+
+## Multi-Species Ecosystem v0.1 (experimental)
+- `multi-species-ecosystem.js` models multiple species in the same habitats while sharing each habitat's resource stock exactly once.
+- Each species has its own population by habitat, genetic pool and lineage identity; resource demand is aggregated before the shared resource-satisfaction factor is applied.
+- A species may become extinct while other species and the habitat continue to exist. The lineage registry records the extinction.
+- Run tests with `node multi-species-ecosystem.test.cjs`.
+- v0.1 does not yet include predation, food webs, dispersal, recolonization or automatic post-speciation partitioning. The latter must conserve individuals and allele copies before it is enabled.
+- Contract: `../../docs/architecture/MULTI_SPECIES_ECOSYSTEM_V0.1.md`; decision: `../../docs/architecture/ADR-011-MULTI-SPECIES-ECOSYSTEM.md`.
