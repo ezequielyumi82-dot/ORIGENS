@@ -26,3 +26,56 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - `life.js` / `mind.js` / `planet.js`: simulações reproduzíveis por seed.
 - `TDD-v0.8.md`: contratos, critérios e próximos passos.
 - `tests.html`: testes locais sem dependências.
+
+
+## Population Dynamics v0.1 (experimental)
+- `population-dynamics.js` adds an isolated deterministic aggregate model for populations distributed across habitats.
+- It models resource recovery, carrying-capacity pressure, births/deaths, local/global extinction and recolonization from adjacent surviving refuges.
+- `diversity()` calculates allele richness, expected heterozygosity and Shannon entropy from supplied allele counts.
+- Run its tests with `node population-dynamics.test.cjs`.
+- This module is experimental and is not yet connected to the browser UI or authoritative C# engine. Its rates are heuristic and not scientifically calibrated.
+- Full contract and limitations: `../../docs/architecture/POPULATION_DYNAMICS_V0.1.md` (repository-level documentation: `docs/architecture/POPULATION_DYNAMICS_V0.1.md`).
+
+
+## Genetic Dynamics v0.1 (experimental)
+- `genetic-dynamics.js` models aggregate diploid allele-copy evolution by habitat using selection, mutation, finite-population drift and explicit gene-flow transfers.
+- Each locus must contain exactly two allele copies per individual. Migration inputs must be synchronized with the ecology's final population counts.
+- `stepWithEcology` sincroniza ticks ecológicos consecutivos e transporta cópias alélicas nos eventos de recolonização/migração.
+- Run tests with `node genetic-dynamics.test.cjs`.
+- The model uses simplified allele-level fitness and does not represent individual genotypes, dominance, recombination or new allele creation. It is not scientifically calibrated and is not yet connected to Population Dynamics or the authoritative C# engine.
+- Full contract: `../../docs/architecture/GENETIC_DYNAMICS_V0.1.md`.
+
+ 
+## Lineage Dynamics v0.1 (experimental)
+- \`lineage-dynamics.js\` tracks persistent species and lineage identities, ancestry, population splits, speciation events and extinction history.
+- Speciation uses configurable genetic-divergence, isolated-population and consecutive-tick thresholds; split population is supplied explicitly and conserved.
+- Run tests with \`node lineage-dynamics.test.cjs\`.
+- This module is experimental and is not yet connected to the ecology/genetics modules, browser UI or authoritative C# engine. Thresholds are heuristic, not scientifically calibrated.
+- Full contract: \`../../docs/architecture/LINEAGE_DYNAMICS_V0.1.md\`.
+
+
+## Integrated Evolution v0.1 (experimental)
+- \`integrated-evolution.js\` coordinates one ecology tick, the genetics adapter and lineage updates.
+- It derives a per-habitat genetic-divergence indicator from allele frequencies and uses a simplified geographic-isolation proxy.
+- The coordinator currently supports one species and one lineage. It pauses after speciation with \`species_partition_required\` until multi-species population/genetic partitioning is implemented.
+- Run tests with \`node integrated-evolution.test.cjs\`.
+- Contract and limitations: \`../../docs/architecture/INTEGRATED_EVOLUTION_V0.1.md\`.
+
+
+
+## Multi-Species Ecosystem v0.1 (experimental)
+- `multi-species-ecosystem.js` models multiple species in the same habitats while sharing each habitat's resource stock exactly once.
+- Each species has its own population by habitat, genetic pool and lineage identity; resource demand is aggregated before the shared resource-satisfaction factor is applied.
+- A species may become extinct while other species and the habitat continue to exist. The lineage registry records the extinction.
+- Run tests with `node multi-species-ecosystem.test.cjs`.
+- A partição pós-especiação agora é integrada: observações qualificadas criam a descendente e repartem população e cópias alélicas sem reposição, conservando indivíduos e alelos por locus. O chamador ainda fornece a observação; não há detector automático.
+- Ainda não inclui predação, redes alimentares, dispersão/recolonização nesta camada ou múltiplos recursos.
+- Contract: `../../docs/architecture/MULTI_SPECIES_ECOSYSTEM_V0.1.md`; decision: `../../docs/architecture/ADR-011-MULTI-SPECIES-ECOSYSTEM.md`.
+
+
+## Post-Speciation Partition v0.1 (experimental)
+- Genetic Dynamics exposes partitionState to split allele copies without replacement, conserving two copies per transferred individual at each locus.
+- Multi-Species Ecosystem.step accepts caller-provided lineage observations. When Lineage Dynamics confirms speciation, the coordinator partitions the parent population and gene pool and creates a distinct descendant species/lineage.
+- The descendant inherits demographic parameters; the habitat and its resource stock remain shared and are never duplicated.
+- Run the genetic and multi-species tests with the commands documented above.
+- Contract: ../../docs/architecture/POST_SPECIATION_PARTITION_V0.1.md; decision: ../../docs/architecture/ADR-012-POST-SPECIATION-PARTITION.md.

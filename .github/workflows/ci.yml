@@ -1,0 +1,41 @@
+name: ORIGENS CI
+
+on:
+  push:
+    branches: [main, "integration/**"]
+    paths:
+      - "ORIGENS-Alpha01-Sprint3B/origens-prototipo/**"
+      - ".github/workflows/ci.yml"
+      - "docs/architecture/**"
+      - "docs/continuity/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ORIGENS-Alpha01-Sprint3B/origens-prototipo/**"
+      - ".github/workflows/ci.yml"
+      - "docs/architecture/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web-prototype-tests:
+    name: Web prototype — Node.js tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run prototype, population, genetic, lineage, integrated and multi-species tests
+        working-directory: ORIGENS-Alpha01-Sprint3B/origens-prototipo
+        run: |
+          node tests-node.cjs
+          node population-dynamics.test.cjs
+          node genetic-dynamics.test.cjs
+          node lineage-dynamics.test.cjs
+          node integrated-evolution.test.cjs
+          node multi-species-ecosystem.test.cjs
