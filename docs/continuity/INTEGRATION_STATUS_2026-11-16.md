@@ -85,3 +85,26 @@ O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do rest
 - `dotnet --info`: comando indisponível; SDK .NET não instalado.
 - Node.js: versão 22.16.0 disponível no ambiente de trabalho.
 - A existência do workflow não será tratada como prova de execução bem-sucedida até que uma execução do GitHub Actions termine com sucesso.
+
+
+## Desenvolvimento adicional — Lineage Dynamics v0.1
+
+Foi criado o módulo experimental \`lineage-dynamics.js\` para identidade persistente de espécies e linhagens, ancestralidade, divisão populacional, especiação condicionada e histórico de extinções.
+
+- IDs descendentes são derivados deterministicamente de ancestral, tick e ordinal.
+- A especiação exige divergência genética, população isolada mínima e duração consecutiva configuráveis.
+- A população dividida é transferida explicitamente por habitat; o módulo valida disponibilidade e conserva o total de indivíduos.
+- Linhagens e espécies extintas permanecem registradas com seus ticks de extinção.
+- Foram adicionados 11 testes em \`lineage-dynamics.test.cjs\`.
+- O workflow Node.js foi atualizado para executar também essa suíte.
+- A implementação é experimental e ainda não está conectada automaticamente à ecologia, genética, interface ou núcleo C#.
+- A divergência genética e os dados de isolamento são fornecidos pelo chamador. Os limiares são heurísticos e não representam critérios taxonômicos ou científicos universais.
+- A nova suíte ainda aguarda execução de CI após esta alteração; não declarar aprovação antes de consultar o resultado.
+
+## Próximas pendências evolutivas
+
+1. Confirmar CI para o adaptador ecologia-genética e para os 11 novos testes de linhagem.
+2. Revisar validações de ancestralidade e cenários de especiação/extinção com dados ecológicos/genéticos integrados.
+3. Criar adaptador que derive observações de linhagem a partir dos estados ecológico e genético, sem duplicar ou inventar população.
+4. Definir persistência/versionamento e portar os contratos estáveis para C# após importar a solução Stage 4.
+5. Manter os critérios experimentais explicitamente separados de alegações de realismo científico.
