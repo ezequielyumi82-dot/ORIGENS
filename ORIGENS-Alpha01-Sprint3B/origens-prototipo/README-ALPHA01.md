@@ -44,3 +44,11 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - Run tests with `node genetic-dynamics.test.cjs`.
 - The model uses simplified allele-level fitness and does not represent individual genotypes, dominance, recombination or new allele creation. It is not scientifically calibrated and is not yet connected to Population Dynamics or the authoritative C# engine.
 - Full contract: `../../docs/architecture/GENETIC_DYNAMICS_V0.1.md`.
+
+ 
+## Lineage Dynamics v0.1 (experimental)
+- \`lineage-dynamics.js\` tracks persistent species and lineage identities, ancestry, population splits, speciation events and extinction history.
+- Speciation uses configurable genetic-divergence, isolated-population and consecutive-tick thresholds; split population is supplied explicitly and conserved.
+- Run tests with \`node lineage-dynamics.test.cjs\`.
+- This module is experimental and is not yet connected to the ecology/genetics modules, browser UI or authoritative C# engine. Thresholds are heuristic, not scientifically calibrated.
+- Full contract: \`../../docs/architecture/LINEAGE_DYNAMICS_V0.1.md\`.
