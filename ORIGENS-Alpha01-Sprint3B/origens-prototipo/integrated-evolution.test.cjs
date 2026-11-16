@@ -74,8 +74,7 @@ test('conserves total population during a lineage split', () => {
 });
 test('derives zero divergence when habitats have identical allele frequencies', () => {
   const config = baseConfig();
-  config.genetics.habitats[0].alleleCounts.coat = { A: 20, a: 20 };
-  config.genetics.habitats[1].alleleCounts.coat = { A: 20, a: 20 };
+  config.genetics.habitats[1].alleleCounts.coat = { A: 40, a: 0 };
   const state = Integrated.createSimulation(config);
   const next = Integrated.step(state);
   assert.equal(next.lastDiagnostics.geneticDivergence, null);
