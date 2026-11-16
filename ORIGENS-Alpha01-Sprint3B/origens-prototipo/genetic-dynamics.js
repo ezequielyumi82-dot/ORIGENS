@@ -56,6 +56,7 @@
     if (new Set(habitats.map(h => h.id)).size !== habitats.length) throw new Error('IDs de habitat duplicados.');
     return {
       version: VERSION, tick: 0, rngState: (Number(config.seed ?? 1) >>> 0) || 1,
+      speciesId: String(config.speciesId ?? 'species-1'),
       mutationRate: finite(config.mutationRate ?? 0, 'mutationRate', 0, 1),
       selection: structuredClone(config.selection || {}), habitats
     };
@@ -91,15 +92,17 @@
   function step(state, options = {}) {
     if (!state || state.version !== VERSION || !Array.isArray(state.habitats)) throw new TypeError('Estado genético incompatível.');
     const random = new Random(state.rngState);
-    const migrations = options.migrations || [];
+    const migrations = (options.migrations || []).map(m => {
+      if (!m || typeof m.sourceHabitatId !== 'string' || typeof m.targetHabitatId !== 'string') throw new TypeError('Migração exige habitat de origem e destino.');
+      const individuals = finite(m.individuals ?? 1, 'migration.individuals');
+      if (!Number.isSafeInteger(individuals) || individuals < 1) throw new RangeError('Migrantes deve ser inteiro positivo.');
+      return { sourceHabitatId: m.sourceHabitatId, targetHabitatId: m.targetHabitatId, individuals };
+    });
     const populations = options.populations || Object.fromEntries(state.habitats.map(h => [h.id, h.population]));
     const incoming = {}, outgoing = {};
     for (const m of migrations) {
-      if (!m || typeof m.sourceHabitatId !== 'string' || typeof m.targetHabitatId !== 'string') throw new TypeError('Migração exige habitat de origem e destino.');
-      const n = finite(m.individuals ?? 1, 'migration.individuals');
-      if (!Number.isSafeInteger(n) || n < 1) throw new RangeError('Migrantes deve ser inteiro positivo.');
-      outgoing[m.sourceHabitatId] = (outgoing[m.sourceHabitatId] || 0) + n;
-      incoming[m.targetHabitatId] = (incoming[m.targetHabitatId] || 0) + n;
+      outgoing[m.sourceHabitatId] = (outgoing[m.sourceHabitatId] || 0) + m.individuals;
+      incoming[m.targetHabitatId] = (incoming[m.targetHabitatId] || 0) + m.individuals;
     }
     const evolved = state.habitats.map(h => {
       const finalPopulation = finite(populations[h.id] ?? h.population, `${h.id}.population`);
@@ -139,11 +142,42 @@
     }
     return { ...state, tick: state.tick + 1, rngState: random.state, habitats: evolved };
   }
+  function stepWithEcology(state, previousWorld, nextWorld) {
+    if (!previousWorld || !nextWorld || !Array.isArray(previousWorld.habitats) || !Array.isArray(nextWorld.habitats)) {
+      throw new TypeError('São necessários os estados ecológicos anterior e posterior.');
+    }
+    if (nextWorld.tick !== previousWorld.tick + 1) throw new RangeError('Os estados ecológicos devem representar ticks consecutivos.');
+    if (previousWorld.speciesId !== nextWorld.speciesId || String(state.speciesId) !== String(previousWorld.speciesId)) {
+      throw new Error('Identidade de espécie incompatível entre ecologia e genética.');
+    }
+    const before = new Map(previousWorld.habitats.map(h => [h.id, h.population]));
+    const after = new Map(nextWorld.habitats.map(h => [h.id, h.population]));
+    const genetic = new Map(state.habitats.map(h => [h.id, h]));
+    if (before.size !== after.size || before.size !== genetic.size) throw new Error('Os conjuntos de habitats devem ser idênticos entre os estados.');
+    for (const [id, population] of before) {
+      if (!after.has(id) || !genetic.has(id)) throw new Error(`Habitat ${id} ausente em um dos subsistemas.`);
+      if (genetic.get(id).population !== population) throw new Error(`População genética desatualizada no habitat ${id}.`);
+    }
+    const migrations = (nextWorld.events || [])
+      .filter(event => event.tick === previousWorld.tick && (event.type === 'population.recolonized' || event.type === 'population.migrated'))
+      .map(event => ({
+        sourceHabitatId: event.sourceHabitatId,
+        targetHabitatId: event.habitatId || event.targetHabitatId,
+        individuals: event.count
+      }));
+    for (const migration of migrations) {
+      if (!migration.sourceHabitatId || !migration.targetHabitatId || !Number.isSafeInteger(migration.individuals) || migration.individuals < 1) {
+        throw new Error('Evento ecológico de migração inválido; atualização genética cancelada.');
+      }
+    }
+    const populations = Object.fromEntries([...after.entries()]);
+    return step(state, { populations, migrations });
+  }
   function frequencies(state) {
     return Object.fromEntries(state.habitats.map(h => [h.id, Object.fromEntries(Object.entries(h.alleleCounts).map(([locus, counts]) => {
       const total = Object.values(counts).reduce((a, b) => a + b, 0);
       return [locus, Object.fromEntries(Object.entries(counts).map(([a, n]) => [a, total ? n / total : 0]))];
     }))]));
   }
-  return { VERSION, createState, step, frequencies };
+  return { VERSION, createState, step, stepWithEcology, frequencies };
 });
