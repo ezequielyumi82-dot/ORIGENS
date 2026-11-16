@@ -8,6 +8,7 @@ on:
       - ".github/workflows/ci.yml"
       - "docs/architecture/POPULATION_DYNAMICS_V0.1.md"
       - "docs/architecture/GENETIC_DYNAMICS_V0.1.md"
+      - "docs/continuity/**"
   pull_request:
     branches: [main]
     paths:
