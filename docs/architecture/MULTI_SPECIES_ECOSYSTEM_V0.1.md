@@ -11,7 +11,7 @@ Arquivo: `ORIGENS-Alpha01-Sprint3B/origens-prototipo/multi-species-ecosystem.js`
 ## API
 
 - `createEcosystem({ habitats, species, lineages, seed, tick })`: valida recursos, identidades, ticks e populações ecológicas/genéticas/filogenéticas.
-- `step(state)`: regenera recursos uma vez por habitat, calcula a demanda conjunta, aplica a mesma satisfação de recursos às espécies presentes, atualiza cada pool genético e sincroniza as linhagens.
+- `step(state, { observations })`: regenera recursos uma vez por habitat, calcula a demanda conjunta, atualiza pools genéticos, envia observações de especiação ao módulo de linhagens e executa a partição genética/populacional quando uma especiação é confirmada.
 - `summary(state)`: apresenta recursos por habitat, populações e frequências genéticas por espécie, eventos e diagnósticos.
 - `validateEcosystem(state)`: valida sincronização, identidades e invariantes.
 
@@ -30,7 +30,7 @@ Cada espécie possui:
 - `resourceUse`, `reproductionRate`, `mortalityRate` e `shortageMortality`;
 - um estado genético independente, com o mesmo conjunto de habitats e população sincronizada.
 
-O registro de linhagens usa os módulos existentes e, em v0.1, exige exatamente uma linhagem por espécie.
+O registro de linhagens usa os módulos existentes e mantém uma linhagem exclusiva por espécie, inclusive após a criação de descendentes.
 
 ## Regra de competição por recurso
 
@@ -59,13 +59,18 @@ A ordem de espécies é estável por ID e o gerador pseudoaleatório é determin
 5. Atualizar cada estado genético com sua própria população final.
 6. Atualizar o registro de linhagens com as populações finais e registrar extinções.
 
-## Limites deliberados de v0.1
+## Partição pós-especiação
+
+Quando uma observação fornecida pelo chamador satisfaz os critérios de Lineage Dynamics, a camada cria a espécie descendente, transfere a população por habitat e reparte o pool genético sem reposição. A partição preserva exatamente indivíduos e cópias alélicas por locus. A descendente herda os parâmetros demográficos da ancestral; habitats e recursos continuam únicos. Detalhes: `POST_SPECIATION_PARTITION_V0.1.md` e ADR-012.
+
+## Limites deliberados
 
 - Modelo agregado por habitat; não existem indivíduos, genótipos individuais ou agentes.
 - A competição é indireta, mediada pelo consumo de um recurso escalar compartilhado.
 - Não há predadores, presas, relações tróficas, transferência de energia ou decompositores.
 - Não há dispersão, recolonização nem migração entre habitats nesta camada.
-- Não há criação automática de espécies por especiação nesta camada. A partição genética e ecológica de uma linhagem após especiação exige uma operação própria para não duplicar indivíduos ou alelos.
+- A observação de divergência/isolamento continua sendo fornecida pelo chamador; não há detector automático de especiação nesta camada.
+- A partição genética é agregada e independente por locus; não preserva genótipos individuais, fase, ligação ou haplótipos.
 - Uma espécie possui uma linhagem exclusiva no escopo v0.1.
 - A extinção de uma espécie não encerra as demais nem remove o habitat ou seu recurso.
 - As taxas são heurísticas; unidades e calibração ecológica precisam ser revistas antes de qualquer interpretação científica.
