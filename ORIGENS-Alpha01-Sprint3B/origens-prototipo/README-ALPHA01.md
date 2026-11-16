@@ -35,3 +35,11 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - Run its tests with `node population-dynamics.test.cjs`.
 - This module is experimental and is not yet connected to the browser UI or authoritative C# engine. Its rates are heuristic and not scientifically calibrated.
 - Full contract and limitations: `../../docs/architecture/POPULATION_DYNAMICS_V0.1.md` (repository-level documentation: `docs/architecture/POPULATION_DYNAMICS_V0.1.md`).
+
+
+## Genetic Dynamics v0.1 (experimental)
+- `genetic-dynamics.js` models aggregate diploid allele-copy evolution by habitat using selection, mutation, finite-population drift and explicit gene-flow transfers.
+- Each locus must contain exactly two allele copies per individual. Migration inputs must be synchronized with the ecology's final population counts.
+- Run tests with `node genetic-dynamics.test.cjs`.
+- The model uses simplified allele-level fitness and does not represent individual genotypes, dominance, recombination or new allele creation. It is not scientifically calibrated and is not yet connected to Population Dynamics or the authoritative C# engine.
+- Full contract: `../../docs/architecture/GENETIC_DYNAMICS_V0.1.md`.
