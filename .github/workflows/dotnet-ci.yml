@@ -9,7 +9,6 @@ on:
     branches: [main]
     paths:
       - "engines/dotnet/**"
-      - ".github/workflows/dotnet-ci.yml"
   workflow_dispatch:
 
 permissions:
