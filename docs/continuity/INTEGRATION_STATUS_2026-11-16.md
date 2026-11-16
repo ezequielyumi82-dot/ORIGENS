@@ -25,7 +25,7 @@ Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo
 
 - Testes locais executados nesta sessão: 11/11 aprovados com Node.js 22.16.0.
 - Testes existentes do Sprint 3B executados localmente: 3/3 aprovados.
-- CI do GitHub Actions após a correção do workflow: sucesso, executando as duas suítes (3 testes genéticos + 11 testes populacionais).
+- CI do GitHub Actions após a correção do workflow: sucesso, executando as suítes do protótipo, população e genética.
 - A suíte foi adicionada ao workflow GitHub Actions.
 - O módulo permanece experimental, sem integração à interface e sem integração ao núcleo C#; as taxas não são calibradas cientificamente.
 - A diversidade é medida, mas mutação, deriva e seleção genética ainda não atualizam frequências alélicas neste módulo.
@@ -37,6 +37,7 @@ Foi criado o módulo experimental isolado `genetic-dynamics.js`, com representa�
 - Testes locais desta etapa: 11/11 aprovados com Node.js 22.16.0.
 - Os testes cobrem validação do pool diploide, determinismo, deriva, mutação, seleção, migração, conservação global de cópias alélicas, sincronização com mudanças demográficas e rejeição de migração inválida.
 - A suíte genética foi adicionada ao GitHub Actions.
+- Execução GitHub Actions `ORIGENS CI` após esta etapa: run `43926040537`, job `Web prototype — Node.js tests`, conclusão `success`; a execução cobre os três comandos Node.js configurados.
 - O módulo não está integrado automaticamente ao módulo ecológico nem ao núcleo C#. A migração é fornecida explicitamente pelo chamador, com as populações finais por habitat.
 - Limitações: sem genótipos individuais, dominância, recombinação, ligação, mutação direcional ou surgimento de alelos; aptidão simplificada por alelo; sem calibração científica.
 
