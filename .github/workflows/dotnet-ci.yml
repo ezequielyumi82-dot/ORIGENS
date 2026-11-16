@@ -1,0 +1,38 @@
+name: ORIGENS .NET 8 CI
+
+on:
+  push:
+    branches: [main, "integration/**"]
+    paths:
+      - "engines/dotnet/**"
+      - ".github/workflows/dotnet-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "engines/dotnet/**"
+      - ".github/workflows/dotnet-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet-tests:
+    name: .NET 8 — restore, build and NUnit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        working-directory: engines/dotnet
+        run: dotnet restore ORIGENS.sln
+      - name: Build Release
+        working-directory: engines/dotnet
+        run: dotnet build ORIGENS.sln --configuration Release --no-restore
+      - name: Run NUnit suite
+        working-directory: engines/dotnet
+        run: dotnet test ORIGENS.sln --configuration Release --no-build --logger "console;verbosity=normal"
