@@ -68,5 +68,14 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - Each species has its own population by habitat, genetic pool and lineage identity; resource demand is aggregated before the shared resource-satisfaction factor is applied.
 - A species may become extinct while other species and the habitat continue to exist. The lineage registry records the extinction.
 - Run tests with `node multi-species-ecosystem.test.cjs`.
-- v0.1 does not yet include predation, food webs, dispersal, recolonization or automatic post-speciation partitioning. The latter must conserve individuals and allele copies before it is enabled.
+- A partição pós-especiação agora é integrada: observações qualificadas criam a descendente e repartem população e cópias alélicas sem reposição, conservando indivíduos e alelos por locus. O chamador ainda fornece a observação; não há detector automático.
+- Ainda não inclui predação, redes alimentares, dispersão/recolonização nesta camada ou múltiplos recursos.
 - Contract: `../../docs/architecture/MULTI_SPECIES_ECOSYSTEM_V0.1.md`; decision: `../../docs/architecture/ADR-011-MULTI-SPECIES-ECOSYSTEM.md`.
+
+
+## Post-Speciation Partition v0.1 (experimental)
+- Genetic Dynamics exposes partitionState to split allele copies without replacement, conserving two copies per transferred individual at each locus.
+- Multi-Species Ecosystem.step accepts caller-provided lineage observations. When Lineage Dynamics confirms speciation, the coordinator partitions the parent population and gene pool and creates a distinct descendant species/lineage.
+- The descendant inherits demographic parameters; the habitat and its resource stock remain shared and are never duplicated.
+- Run the genetic and multi-species tests with the commands documented above.
+- Contract: ../../docs/architecture/POST_SPECIATION_PARTITION_V0.1.md; decision: ../../docs/architecture/ADR-012-POST-SPECIATION-PARTITION.md.
