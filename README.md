@@ -12,7 +12,7 @@ Este repositório passa a ser a referência central do projeto. A integração s
 | Núcleo C#/.NET 8 (Stage 4) | Backup de continuidade de 11/11/2026 | Recuperado e inspecionado; integração no repositório pendente |
 | Documentação científica e roadmap geológico | `gemini-code-1785857912392.md` | Preservada como referência estratégica; requer reconciliação com o plano de implementação |
 | CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo e do módulo experimental de dinâmica populacional |
-| Dinâmica populacional experimental | `population-dynamics.js` | Modelo agregado isolado; não integrado à interface nem ao núcleo C# |
+| Dinâmica populacional experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/population-dynamics.js` | Modelo agregado isolado; não integrado à interface nem ao núcleo C# |
 
 > **Integridade do estado:** a solução C# recuperada contém 7 projetos e uma suíte NUnit. O pacote de continuidade informa que build e testes ainda não haviam sido executados por ausência do SDK .NET no ambiente original. Portanto, não se deve considerar o núcleo C# compilado ou validado até que a CI confirme isso após sua integração.
 
@@ -23,6 +23,7 @@ Requisitos: Node.js.
 ```bash
 cd ORIGENS-Alpha01-Sprint3B/origens-prototipo
 node tests-node.cjs
+node population-dynamics.test.cjs
 ```
 
 Para explorar a interface, abra `index.html` em um navegador ou sirva a pasta por um servidor HTTP local. A página `tests.html` executa verificações adicionais no navegador.
