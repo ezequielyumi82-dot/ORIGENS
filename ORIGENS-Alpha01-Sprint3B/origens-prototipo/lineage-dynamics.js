@@ -164,15 +164,16 @@
       const isolatedPopulation = integer(observation.isolatedPopulation, 'isolatedPopulation');
       const counts = normalizeCounts(observation.splitByHabitat || {}, 'splitByHabitat');
       const candidateCount = total(counts);
-      const availablePopulation = total(populationById.get(parent.id).byHabitat);
-      if (isolatedPopulation > availablePopulation || candidateCount > isolatedPopulation) {
-        throw new RangeError('A divisão excede a população isolada observada ou a população disponível.');
-      }
       const qualifies = divergence >= state.speciation.geneticDivergenceThreshold &&
         isolatedPopulation >= state.speciation.minIsolatedPopulation &&
         candidateCount >= state.speciation.minIsolatedPopulation;
       parent.isolationTicks = qualifies ? parent.isolationTicks + 1 : 0;
-      if (!qualifies || parent.isolationTicks < state.speciation.minIsolationTicks) continue;
+      if (!qualifies) continue;
+      const availablePopulation = total(populationById.get(parent.id).byHabitat);
+      if (isolatedPopulation > availablePopulation || candidateCount > isolatedPopulation) {
+        throw new RangeError('A divisão excede a população isolada observada ou a população disponível.');
+      }
+      if (parent.isolationTicks < state.speciation.minIsolationTicks) continue;
       const parentPopulation = populationById.get(parent.id);
       for (const [habitatId, count] of Object.entries(counts)) {
         if ((parentPopulation.byHabitat[habitatId] || 0) < count) {
