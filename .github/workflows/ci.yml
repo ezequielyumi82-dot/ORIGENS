@@ -30,10 +30,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run prototype, population, genetic and lineage tests
+      - name: Run prototype, population, genetic, lineage and integrated evolution tests
         working-directory: ORIGENS-Alpha01-Sprint3B/origens-prototipo
         run: |
           node tests-node.cjs
           node population-dynamics.test.cjs
           node genetic-dynamics.test.cjs
           node lineage-dynamics.test.cjs
+          node integrated-evolution.test.cjs
