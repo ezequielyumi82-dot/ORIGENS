@@ -26,3 +26,12 @@ O progresso é salvo no armazenamento local do navegador. Limpar os dados do sit
 - `life.js` / `mind.js` / `planet.js`: simulações reproduzíveis por seed.
 - `TDD-v0.8.md`: contratos, critérios e próximos passos.
 - `tests.html`: testes locais sem dependências.
+
+
+## Population Dynamics v0.1 (experimental)
+- `population-dynamics.js` adds an isolated deterministic aggregate model for populations distributed across habitats.
+- It models resource recovery, carrying-capacity pressure, births/deaths, local/global extinction and recolonization from adjacent surviving refuges.
+- `diversity()` calculates allele richness, expected heterozygosity and Shannon entropy from supplied allele counts.
+- Run its tests with `node population-dynamics.test.cjs`.
+- This module is experimental and is not yet connected to the browser UI or authoritative C# engine. Its rates are heuristic and not scientifically calibrated.
+- Full contract and limitations: `../../docs/architecture/POPULATION_DYNAMICS_V0.1.md` (repository-level documentation: `docs/architecture/POPULATION_DYNAMICS_V0.1.md`).
