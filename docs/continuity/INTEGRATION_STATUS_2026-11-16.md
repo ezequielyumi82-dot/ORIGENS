@@ -148,3 +148,11 @@ Foi implementada uma camada experimental multiespécie separada do Integrated Ev
 - Limites: competição indireta por recurso escalar; sem predação, teias alimentares, dispersão, recolonização ou especiação automática. A partição pós-especiação ainda precisa conservar indivíduos e cópias alélicas sem duplicação.
 - A suíte foi adicionada ao GitHub Actions. A aprovação final da CI desta revisão ainda precisa ser observada.
 - A integração C#/.NET e os testes NUnit continuam pendentes, conforme decisão anterior.
+
+
+### Verificação final — Multi-Species Ecosystem v0.1
+
+- CI GitHub Actions run [43937855428](https://github.com/ezequielyumi82-dot/ORIGENS/actions/runs/43937855428): conclusão `success`, commit `4702a20f4fad39d9ae092d949813f95c6ea1955f`.
+- O job executou as seis suítes: Sprint 3B (3), Population Dynamics (11), Genetic Dynamics (14), Lineage Dynamics (14), Integrated Evolution (15) e Multi-Species Ecosystem (10). Total: **67 testes JavaScript aprovados**.
+- A suíte nova verificou demanda e consumo compartilhados, satisfação ambiental comum, pools genéticos independentes, sincronização do registro de linhagens, extinção de uma espécie sem encerrar as demais, determinismo, imutabilidade e validações.
+- Esta aprovação não cobre C#/.NET, NUnit, integração com interface, predação, redes tróficas nem especiação com partição genética.
