@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run prototype and population tests
+      - name: Run prototype, population and genetic tests
         working-directory: ORIGENS-Alpha01-Sprint3B/origens-prototipo
         run: |
           node tests-node.cjs
