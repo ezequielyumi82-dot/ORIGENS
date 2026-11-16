@@ -17,7 +17,7 @@ O repositório `ezequielyumi82-dot/ORIGENS` foi aprovado como referência centra
 
 - Workflow `ORIGENS CI` executado no GitHub Actions em 16/11/2026.
 - Job `Web prototype — Node.js tests`: `success`.
-- A execução mais recente cobre `node tests-node.cjs` e `node population-dynamics.test.cjs`; não valida o núcleo C#.
+- A execução mais recente cobre `node tests-node.cjs`, `node population-dynamics.test.cjs` e `node genetic-dynamics.test.cjs`; não valida o núcleo C#.
 
 ## Desenvolvimento adicional — Population Dynamics v0.1
 
@@ -30,11 +30,21 @@ Foi criado o módulo experimental isolado `population-dynamics.js` no protótipo
 - O módulo permanece experimental, sem integração à interface e sem integração ao núcleo C#; as taxas não são calibradas cientificamente.
 - A diversidade é medida, mas mutação, deriva e seleção genética ainda não atualizam frequências alélicas neste módulo.
 
+## Desenvolvimento adicional — Genetic Dynamics v0.1
+
+Foi criado o módulo experimental isolado `genetic-dynamics.js`, com representação diploide agregada (duas cópias alélicas por indivíduo/locus), seleção por aptidão relativa de alelos, mutação entre alelos já declarados, deriva genética por amostragem finita e fluxo gênico explícito entre habitats. A função `frequencies` expõe as frequências por habitat e locus.
+
+- Testes locais desta etapa: 11/11 aprovados com Node.js 22.16.0.
+- Os testes cobrem validação do pool diploide, determinismo, deriva, mutação, seleção, migração, conservação global de cópias alélicas, sincronização com mudanças demográficas e rejeição de migração inválida.
+- A suíte genética foi adicionada ao GitHub Actions.
+- O módulo não está integrado automaticamente ao módulo ecológico nem ao núcleo C#. A migração é fornecida explicitamente pelo chamador, com as populações finais por habitat.
+- Limitações: sem genótipos individuais, dominância, recombinação, ligação, mutação direcional ou surgimento de alelos; aptidão simplificada por alelo; sem calibração científica.
+
 ## O que esta branch prepara
 
 - README principal com a visão integrada e o estado real dos componentes.
 - Estrutura de documentação e regras de integração.
-- CI Node.js para as suítes do protótipo e da dinâmica populacional experimental.
+- CI Node.js para as suítes do protótipo e dos módulos experimentais populacional e genético.
 - Preservação dos arquivos e diretórios atuais do protótipo e da baseline geológica.
 
 ## Workflow .NET e motivo de bloqueio atual
@@ -55,7 +65,9 @@ O workflow .NET 8 foi preparado, mas uma execução inicial falhou antes do rest
 2. Adicionar CI .NET 8 com restore, build Release e NUnit.
 3. Corrigir erros reais de compilação/teste e registrar evidências.
 4. Formalizar os contratos de extinção local/global, recuperação populacional, diversidade genética e capacidade de suporte antes de ampliar a simulação.
-5. Evoluir a documentação mestre a cada etapa concluída.
+5. Criar um adaptador ecológico-genético que traduza migrações e populações finais para o contrato genético.
+6. Formalizar identidade de espécie/locus/linhagem e validar gargalos, fixação e perda de alelos.
+7. Evoluir a documentação mestre a cada etapa concluída.
 
 ## Evidência do ambiente desta retomada
 
