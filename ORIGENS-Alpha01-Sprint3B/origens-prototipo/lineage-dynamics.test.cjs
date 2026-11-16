@@ -95,5 +95,21 @@ testCase('rejects duplicate observations and invalid population counts', () => {
   assert.throws(() => Lineages.step(initial(), { observations: [observation(), observation()] }), /duplicada/);
   assert.throws(() => Lineages.step(initial(), { populationUpdates: [{ lineageId: 'lineage-fox-main', byHabitat: { forest: -1 } }] }), RangeError);
 });
+testCase('rejects circular lineage ancestry', () => {
+  assert.throws(() => Lineages.createState({
+    species: [{ id: 's' }],
+    lineages: [{ id: 'a', speciesId: 's', parentLineageId: 'b' }, { id: 'b', speciesId: 's', parentLineageId: 'a' }]
+  }), /Ciclo/);
+});
+testCase('rejects isolation and split counts inconsistent with parent population', () => {
+  assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 100 })] }), /excede/);
+  assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 5, splitByHabitat: { forest: 6 } })] }), /excede/);
+});
+testCase('rejects duplicate population updates for one lineage', () => {
+  assert.throws(() => Lineages.step(initial(), { populationUpdates: [
+    { lineageId: 'lineage-fox-main', byHabitat: { forest: 10 } },
+    { lineageId: 'lineage-fox-main', byHabitat: { forest: 9 } }
+  ] }), /duplicada/);
+});
 console.log(tests.length + ' testes Lineage Dynamics aprovados:');
 tests.forEach(name => console.log('✓ ' + name));
