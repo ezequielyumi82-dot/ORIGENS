@@ -1,0 +1,32 @@
+name: ORIGENS CI
+
+on:
+  push:
+    branches: [main, "integration/**"]
+    paths:
+      - "ORIGENS-Alpha01-Sprint3B/origens-prototipo/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ORIGENS-Alpha01-Sprint3B/origens-prototipo/**"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web-prototype-tests:
+    name: Web prototype — Node.js tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run genetic-core tests
+        working-directory: ORIGENS-Alpha01-Sprint3B/origens-prototipo
+        run: node tests-node.cjs
