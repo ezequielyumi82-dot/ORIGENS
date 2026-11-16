@@ -11,8 +11,9 @@ Este repositório passa a ser a referência central do projeto. A integração s
 | Protótipo Alpha 0.1 / Sprint 3B | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/` | Já versionado; preservado |
 | Núcleo C#/.NET 8 (Stage 4) | Backup de continuidade de 11/11/2026 | Recuperado e inspecionado; integração no repositório pendente |
 | Documentação científica e roadmap geológico | `gemini-code-1785857912392.md` | Preservada como referência estratégica; requer reconciliação com o plano de implementação |
-| CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo e do módulo experimental de dinâmica populacional |
+| CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo e dos módulos experimentais de dinâmica populacional e genética |
 | Dinâmica populacional experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/population-dynamics.js` | Modelo agregado isolado; não integrado à interface nem ao núcleo C# |
+| Dinâmica genética experimental | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/genetic-dynamics.js` | Mutação, seleção alélica, deriva e fluxo gênico agregados; não integrado à ecologia nem ao núcleo C# |
 
 > **Integridade do estado:** a solução C# recuperada contém 7 projetos e uma suíte NUnit. O pacote de continuidade informa que build e testes ainda não haviam sido executados por ausência do SDK .NET no ambiente original. Portanto, não se deve considerar o núcleo C# compilado ou validado até que a CI confirme isso após sua integração.
 
@@ -24,6 +25,7 @@ Requisitos: Node.js.
 cd ORIGENS-Alpha01-Sprint3B/origens-prototipo
 node tests-node.cjs
 node population-dynamics.test.cjs
+node genetic-dynamics.test.cjs
 ```
 
 Para explorar a interface, abra `index.html` em um navegador ou sirva a pasta por um servidor HTTP local. A página `tests.html` executa verificações adicionais no navegador.
@@ -45,6 +47,8 @@ O protótipo web é uma referência funcional e histórica; não será confundid
 - [Estrutura e governança do repositório](docs/architecture/REPOSITORY_STRUCTURE.md)
 - [Dinâmica populacional experimental v0.1](docs/architecture/POPULATION_DYNAMICS_V0.1.md)
 - [ADR-007 — Decisão do modelo populacional](docs/architecture/ADR-007-POPULATION-DYNAMICS.md)
+- [Dinâmica genética experimental v0.1](docs/architecture/GENETIC_DYNAMICS_V0.1.md)
+- [ADR-008 — Decisão do modelo genético](docs/architecture/ADR-008-GENETIC-DYNAMICS.md)
 
 ## Princípios de desenvolvimento
 
