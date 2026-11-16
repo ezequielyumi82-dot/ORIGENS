@@ -102,7 +102,7 @@ testCase('rejects circular lineage ancestry', () => {
 });
 testCase('rejects isolation and split counts inconsistent with parent population', () => {
   assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 100 })] }), /excede/);
-  assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 5, splitByHabitat: { forest: 6 } })] }), /excede/);
+  assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 8, splitByHabitat: { forest: 9 } })] }), /excede/);
 });
 testCase('rejects duplicate population updates for one lineage', () => {
   assert.throws(() => Lineages.step(initial(), { populationUpdates: [
