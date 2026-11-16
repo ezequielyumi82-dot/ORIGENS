@@ -11,7 +11,8 @@ Este repositório passa a ser a referência central do projeto. A integração s
 | Protótipo Alpha 0.1 / Sprint 3B | `ORIGENS-Alpha01-Sprint3B/origens-prototipo/` | Já versionado; preservado |
 | Núcleo C#/.NET 8 (Stage 4) | Backup de continuidade de 11/11/2026 | Recuperado e inspecionado; integração no repositório pendente |
 | Documentação científica e roadmap geológico | `gemini-code-1785857912392.md` | Preservada como referência estratégica; requer reconciliação com o plano de implementação |
-| CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo |
+| CI automatizada | `.github/workflows/ci.yml` | Verifica os testes Node.js do protótipo e do módulo experimental de dinâmica populacional |
+| Dinâmica populacional experimental | `population-dynamics.js` | Modelo agregado isolado; não integrado à interface nem ao núcleo C# |
 
 > **Integridade do estado:** a solução C# recuperada contém 7 projetos e uma suíte NUnit. O pacote de continuidade informa que build e testes ainda não haviam sido executados por ausência do SDK .NET no ambiente original. Portanto, não se deve considerar o núcleo C# compilado ou validado até que a CI confirme isso após sua integração.
 
@@ -41,6 +42,7 @@ O protótipo web é uma referência funcional e histórica; não será confundid
 - [Baseline científico e roadmap geológico](gemini-code-1785857912392.md)
 - [Estado da integração de 16/11/2026](docs/continuity/INTEGRATION_STATUS_2026-11-16.md)
 - [Estrutura e governança do repositório](docs/architecture/REPOSITORY_STRUCTURE.md)
+- [Dinâmica populacional experimental v0.1](docs/architecture/POPULATION_DYNAMICS_V0.1.md)
 
 ## Princípios de desenvolvimento
 
