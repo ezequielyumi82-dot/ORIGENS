@@ -174,11 +174,46 @@
     const populations = Object.fromEntries([...after.entries()]);
     return step(state, { populations, migrations });
   }
+  function partitionState(state, options = {}) {
+    if (!state || state.version !== VERSION || !Array.isArray(state.habitats)) throw new TypeError('Estado genético incompatível.');
+    const childSpeciesId = String(options.childSpeciesId || '');
+    if (!childSpeciesId.trim() || childSpeciesId === state.speciesId) throw new TypeError('A espécie descendente deve possuir identidade própria.');
+    const requested = options.childPopulations || {};
+    const known = new Set(state.habitats.map(h => h.id));
+    for (const id of Object.keys(requested)) if (!known.has(id)) throw new Error('Partição referencia habitat inexistente: ' + id);
+    const random = new Random(state.rngState);
+    const parentHabitats = [], childHabitats = [];
+    let childTotal = 0;
+    for (const habitat of state.habitats) {
+      const childPopulation = finite(requested[habitat.id] ?? 0, habitat.id + '.childPopulation');
+      if (!Number.isSafeInteger(childPopulation) || childPopulation > habitat.population) throw new RangeError('Partição excede a população disponível em ' + habitat.id + '.');
+      childTotal += childPopulation;
+      const parentPopulation = habitat.population - childPopulation;
+      const parentCounts = {}, childCounts = {};
+      for (const [locus, counts] of Object.entries(habitat.alleleCounts)) {
+        const draw = drawWithoutReplacement(counts, childPopulation * 2, random);
+        childCounts[locus] = draw.picked;
+        parentCounts[locus] = draw.remaining;
+        const totalCopies = Object.values(counts).reduce((a,b)=>a+b,0);
+        const splitCopies = Object.values(draw.picked).reduce((a,b)=>a+b,0) + Object.values(draw.remaining).reduce((a,b)=>a+b,0);
+        if (splitCopies !== totalCopies) throw new Error('Conservação alélica violada durante a partição.');
+      }
+      parentHabitats.push({ id: habitat.id, population: parentPopulation, alleleCounts: parentCounts });
+      childHabitats.push({ id: habitat.id, population: childPopulation, alleleCounts: childCounts });
+    }
+    if (childTotal < 1) throw new RangeError('A espécie descendente deve receber ao menos um indivíduo.');
+    let hash = 2166136261;
+    const seedText = state.speciesId + '|' + childSpeciesId + '|' + state.tick + '|' + state.rngState;
+    for (let i=0;i<seedText.length;i++) { hash ^= seedText.charCodeAt(i); hash = Math.imul(hash,16777619) >>> 0; }
+    const parentState = { ...state, rngState: random.state, habitats: parentHabitats };
+    const childState = { ...state, speciesId: childSpeciesId, rngState: hash || 1, habitats: childHabitats };
+    return { parentState, childState, childPopulation: childTotal };
+  }
   function frequencies(state) {
     return Object.fromEntries(state.habitats.map(h => [h.id, Object.fromEntries(Object.entries(h.alleleCounts).map(([locus, counts]) => {
       const total = Object.values(counts).reduce((a, b) => a + b, 0);
       return [locus, Object.fromEntries(Object.entries(counts).map(([a, n]) => [a, total ? n / total : 0]))];
     }))]));
   }
-  return { VERSION, createState, step, stepWithEcology, frequencies };
+  return { VERSION, createState, step, stepWithEcology, partitionState, frequencies };
 });
