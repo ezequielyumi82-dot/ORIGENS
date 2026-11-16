@@ -88,8 +88,7 @@ testCase('does not erase an extinct lineage when another lineage remains active'
   assert.equal(next.species[0].status, 'active');
 });
 testCase('rejects a split larger than the parent population', () => {
-  const first = Lineages.step(initial(), { observations: [observation({ splitByHabitat: { forest: 6 } })] });
-  assert.throws(() => Lineages.step(first, { observations: [observation({ splitByHabitat: { forest: 100 } })] }), /excede/);
+  assert.throws(() => Lineages.step(initial(), { observations: [observation({ isolatedPopulation: 100, splitByHabitat: { forest: 100 } })] }), /excede/);
 });
 testCase('rejects duplicate observations and invalid population counts', () => {
   assert.throws(() => Lineages.step(initial(), { observations: [observation(), observation()] }), /duplicada/);
